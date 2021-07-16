@@ -38,9 +38,17 @@ async function printUsingWASM() {
   wasmModule.instance.exports.printFactorial(inputValue);
 }
 
+async function sayHelloUsingWASM() {
+  const wasmModule = await loadMainWasmModule();
+  const result = wasmModule.instance.exports.sayHello();
+
+  document.getElementById('hello-response').value = result;
+}
+
 function setup() {
   document.getElementById('add-button').addEventListener('click', addFromWASM)
   document.getElementById('factorial-button').addEventListener('click', printUsingWASM)
+  document.getElementById('hello-button').addEventListener('click', sayHelloUsingWASM)
 }
 
 setup();

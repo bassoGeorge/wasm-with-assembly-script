@@ -22,3 +22,9 @@ function calcFactorial(acc: i64, n: i64): i64 {
     }
 }
 
+
+// 3. String function
+
+export function sayHello(): string {
+    return "Hello!"
+}
