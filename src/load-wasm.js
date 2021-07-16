@@ -1,3 +1,5 @@
+import loader from "@assemblyscript/loader"
+
 const defaultWASMImports = {
   env: {
     abort() {
@@ -13,11 +15,11 @@ export async function loadWASM(url, imports = {}) {
     ...imports
   }
 
-  if (WebAssembly.instantiateStreaming) {
-    return WebAssembly.instantiateStreaming(httpPromise, importObject);
+  if (loader.instantiateStreaming) {
+    return loader.instantiateStreaming(httpPromise, importObject);
   } else {
     const response = await httpPromise;
     const bytes = await response.arrayBuffer();
-    return WebAssembly.instantiate(bytes, importObject);
+    return loader.instantiate(bytes, importObject);
   }
 }

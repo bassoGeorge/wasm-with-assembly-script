@@ -40,9 +40,14 @@ async function printUsingWASM() {
 
 async function sayHelloUsingWASM() {
   const wasmModule = await loadMainWasmModule();
-  const result = wasmModule.instance.exports.sayHello();
+  const resultPtr = wasmModule.instance.exports.sayHello();
 
-  document.getElementById('hello-response').value = result;
+  const { __getString } = wasmModule.exports;
+
+  // noinspection UnnecessaryLocalVariableJS
+  const actualResult = __getString(resultPtr);
+
+  document.getElementById('hello-response').value = actualResult;
 }
 
 function setup() {
