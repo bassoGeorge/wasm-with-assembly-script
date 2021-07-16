@@ -1,31 +1,28 @@
-const loadWasm = (
-  () => {
-    let loadedWasm;
+import {loadWASM} from "./load-wasm";
 
-    return async function () {
-      if (loadedWasm) {
-        return loadedWasm;
-      }
-
-      loadedWasm = await WebAssembly.instantiateStreaming(
-        fetch('./build/optimized.wasm'),
-        {
-          env: {
-            abort: () => console.log("Wasm aborted!")
-          },
-          index: {
-            printFactorialToDOM: (value) => document.getElementById('factorial-result').value = value.toLocaleString()
-          }
-        }
-      )
-
-      return loadedWasm;
+let cachedModule;
+const imports = {
+  index: {
+    printFactorialToDOM(value) {
+      document.getElementById('factorial-result').value = value.toLocaleString()
     }
   }
-)()
+}
+
+async function loadMainWasmModule () {
+  if (cachedModule) {
+    return cachedModule;
+  }
+
+  cachedModule = await loadWASM('/build/optimized.wasm', imports);
+
+  return cachedModule;
+}
+
 
 async function addFromWASM() {
-  const wasmModule = await loadWasm();
+  const wasmModule = await loadMainWasmModule();
+
   const a = document.getElementById('add-a').value;
   const b = document.getElementById('add-b').value;
 
@@ -35,7 +32,7 @@ async function addFromWASM() {
 }
 
 async function printUsingWASM() {
-  const wasmModule = await loadWasm();
+  const wasmModule = await loadMainWasmModule();
   const inputValue = document.getElementById('factorial-input').value;
 
   wasmModule.instance.exports.printFactorial(inputValue);
