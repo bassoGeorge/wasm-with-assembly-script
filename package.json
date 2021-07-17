@@ -2,7 +2,7 @@
   "name": "assembly-script-exp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "node tests",
     "asbuild:untouched": "asc assembly/index.ts --target debug",
